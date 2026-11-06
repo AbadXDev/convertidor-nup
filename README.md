@@ -6,6 +6,12 @@ A super simple, native macOS app to convert a Nintendo Switch 2 game dump **fold
 
 ![Platform](https://img.shields.io/badge/platform-macOS%2013%2B%20(Apple%20Silicon)-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
+## Download
+
+Grab the ready-to-use app from the [**Releases**](https://github.com/AbadXDev/convertidor-nup/releases) page — no compiling needed. The app is ad-hoc signed (not notarized): if macOS blocks it the first time, right-click the app and choose Open.
+
+Descarga la app lista para usar desde la página de [**Releases**](https://github.com/AbadXDev/convertidor-nup/releases), sin compilar. Está firmada ad hoc (sin notarizar): si macOS la bloquea la primera vez, haz clic derecho sobre la app y elige Abrir.
+
 ## What it does
 
 1. **Pick a folder** (button or drag & drop) — the app validates the dump layout (`base/`, `updates/<version>/`, `dlc/`… or a flat `exefs/` + `romfs/` folder), reads the **title ID** straight from `main.npdm`, lists the packages it found and shows the total size.
