@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>ConvertidorNUP</AssemblyName>
+    <RootNamespace>ConvertidorNUP</RootNamespace>
+    <Version>1.1.0</Version>
+    <Authors>AbadXDev</Authors>
+    <Description>Convierte una carpeta de juego de Switch 2 en un archivo .nup</Description>
+    <Copyright>By AbadXDev</Copyright>
+  </PropertyGroup>
+
+</Project>

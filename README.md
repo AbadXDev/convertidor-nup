@@ -12,6 +12,8 @@ Grab the ready-to-use app from the [**Releases**](https://github.com/AbadXDev/co
 
 Descarga la app lista para usar desde la página de [**Releases**](https://github.com/AbadXDev/convertidor-nup/releases), sin compilar. Está firmada ad hoc (sin notarizar): si macOS la bloquea la primera vez, haz clic derecho sobre la app y elige Abrir.
 
+**Windows:** there is also a Windows version (same interface, same features) — download `Convertidor-NUP-Windows-v1.1.zip` from Releases and run `ConvertidorNUP.exe`. Source code in the [`windows/`](windows/) folder.
+
 ## What it does
 
 1. **Pick a folder** (button or drag & drop) — the app validates the dump layout (`base/`, `updates/<version>/`, `dlc/`… or a flat `exefs/` + `romfs/` folder), reads the **title ID** straight from `main.npdm`, lists the packages it found and shows the total size.
