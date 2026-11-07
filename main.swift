@@ -224,9 +224,31 @@ final class Model: ObservableObject {
         statusText = "Instalando la herramienta nup (solo la primera vez)…"
         let script = """
         set -e
-        if [ ! -d "$HOME/nup-tool/.git" ]; then git clone https://github.com/a55uka/nup.git "$HOME/nup-tool"; fi
-        PY=/opt/homebrew/bin/python3.12
-        [ -x "$PY" ] || PY=$(command -v python3.12)
+        if [ ! -d "$HOME/nup-tool/tools/nup" ]; then
+          rm -rf "$HOME/nup-tool" "$HOME/nup-descarga"
+          mkdir -p "$HOME/nup-descarga"
+          echo "Descargando la herramienta nup…"
+          curl -fsSL "https://codeload.github.com/a55uka/nup/zip/refs/heads/meow" -o "$HOME/nup-descarga/nup.zip" || { echo "No se pudo descargar la herramienta. Revisa tu conexión a internet y reintenta."; exit 4; }
+          ditto -x -k "$HOME/nup-descarga/nup.zip" "$HOME/nup-descarga"
+          mv "$HOME/nup-descarga/nup-meow" "$HOME/nup-tool"
+          rm -rf "$HOME/nup-descarga"
+          echo "Herramienta descargada"
+        fi
+        PY=""
+        for c in /opt/homebrew/bin/python3.12 python3.12 python3.13 python3.14 python3.11 python3.10 /opt/homebrew/bin/python3 python3; do
+          if command -v "$c" >/dev/null 2>&1; then PY=$(command -v "$c"); break; fi
+        done
+        if [ -z "$PY" ]; then
+          echo "FALTA_PYTHON"
+          echo "— — —"
+          echo "Falta Python 3 en este Mac. Es lo único que la app necesita."
+          echo "Cómo instalarlo (2 minutos):"
+          echo "1. Entra a https://www.python.org/downloads/ y descarga Python para macOS."
+          echo "2. Instálalo como cualquier app."
+          echo "3. Cierra esta app, vuelve a abrirla y pulsa «Instalar (1 clic)»."
+          exit 3
+        fi
+        echo "Usando Python: $PY"
         "$PY" -m venv "$HOME/.venvs/nup"
         "$HOME/.venvs/nup/bin/pip" install -q "zstandard>=0.22"
         echo INSTALACION_OK
@@ -238,6 +260,9 @@ final class Model: ObservableObject {
                 self.checkTool()
                 self.phase = .idle
                 self.statusText = self.toolReady ? "Herramienta lista. Elige la carpeta del juego." : "La instalación terminó pero no encuentro la herramienta."
+            } else if self.log.contains("FALTA_PYTHON") {
+                self.phase = .failed
+                self.statusText = "Falta Python 3: sigue los pasos del registro de abajo."
             } else {
                 self.phase = .failed
                 self.statusText = "La instalación falló (código \(code)). Revisa el registro de abajo."

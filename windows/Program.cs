@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -274,35 +276,90 @@ namespace ConvertidorNUP
 
         static string Q(string s) { return "\"" + s.Replace("\"", "\\\"") + "\""; }
 
+        class PythonMissingException : Exception { public PythonMissingException() : base("Falta Python 3") { } }
+
+        async Task<bool> PythonOk(string file, string args)
+        {
+            try { return await RunCmd(file, args, Home, _ => { }) == 0; }
+            catch { return false; }
+        }
+
+        async Task DownloadTool()
+        {
+            string zipPath = Path.Combine(Home, "nup-descarga.zip");
+            string tmpDir = Path.Combine(Home, "nup-descarga");
+            Log("Descargando la herramienta nup\u2026");
+            try
+            {
+                using (var http = new HttpClient())
+                {
+                    http.DefaultRequestHeaders.UserAgent.ParseAdd("ConvertidorNUP");
+                    var data = await http.GetByteArrayAsync("https://codeload.github.com/a55uka/nup/zip/refs/heads/meow");
+                    File.WriteAllBytes(zipPath, data);
+                }
+            }
+            catch { throw new Exception("No se pudo descargar la herramienta. Revisa tu conexi\u00f3n a internet y reintenta."); }
+            if (Directory.Exists(tmpDir)) Directory.Delete(tmpDir, true);
+            ZipFile.ExtractToDirectory(zipPath, tmpDir);
+            string inner = Path.Combine(tmpDir, "nup-meow");
+            if (!Directory.Exists(inner)) throw new Exception("La descarga no tiene el formato esperado. Reintenta.");
+            if (Directory.Exists(RepoDir)) Directory.Delete(RepoDir, true);
+            Directory.Move(inner, RepoDir);
+            Directory.Delete(tmpDir, true);
+            File.Delete(zipPath);
+            Log("Herramienta descargada.");
+        }
+
+        void ShowPythonHelp()
+        {
+            Log("\u2014 \u2014 \u2014");
+            Log("FALTA PYTHON 3 en este equipo. Es lo \u00fanico que la app necesita.");
+            Log("C\u00f3mo instalarlo (2 minutos):");
+            Log("1. Acepta el aviso siguiente para abrir la p\u00e1gina de descarga de Python.");
+            Log("2. Al instalarlo, MARCA la casilla \u00abAdd python.exe to PATH\u00bb.");
+            Log("3. Cuando termine, cierra esta app, vuelve a abrirla y pulsa \u00abInstalar\u00bb.");
+            var r = MessageBox.Show(
+                "Para terminar la instalaci\u00f3n falta Python 3.\n\n" +
+                "1. Descarga Python desde python.org.\n" +
+                "2. Al instalarlo, marca la casilla \u00abAdd python.exe to PATH\u00bb.\n" +
+                "3. Cierra esta app, vuelve a abrirla y pulsa \u00abInstalar\u00bb.\n\n" +
+                "\u00bfQuieres abrir ahora la p\u00e1gina de descarga de Python?",
+                "Falta Python 3", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (r == DialogResult.Yes)
+                Process.Start(new ProcessStartInfo("https://www.python.org/downloads/") { UseShellExecute = true });
+        }
+
         async Task InstallTool()
         {
             if (busy) return;
             busy = true; installBtn.Enabled = false;
-            statusLabel.Text = "Instalando la herramienta… (solo la primera vez)";
+            statusLabel.Text = "Instalando la herramienta\u2026 (solo la primera vez)";
             try
             {
-                if (!Directory.Exists(RepoDir))
+                if (!Directory.Exists(ModDir))
                 {
-                    Log("Clonando la herramienta nup…");
-                    int rc = await RunCmd("git", "clone https://github.com/a55uka/nup.git " + Q(RepoDir), Home, Log);
-                    if (rc != 0) throw new Exception("git clone falló (¿está Git instalado?)");
+                    if (Directory.Exists(RepoDir)) Directory.Delete(RepoDir, true);
+                    await DownloadTool();
                 }
                 if (!File.Exists(VenvPy))
                 {
-                    Log("Creando el entorno de Python…");
+                    Log("Creando el entorno de Python\u2026");
                     Directory.CreateDirectory(Path.GetDirectoryName(VenvDir));
-                    int rc = await RunCmd("py", "-3 -m venv " + Q(VenvDir), Home, Log);
-                    if (rc != 0)
-                    {
-                        rc = await RunCmd("python", "-m venv " + Q(VenvDir), Home, Log);
-                        if (rc != 0) throw new Exception("No se encontró Python 3. Instálalo desde python.org y reintenta.");
-                    }
+                    int rc = -1;
+                    if (await PythonOk("py", "-3 --version")) rc = await RunCmd("py", "-3 -m venv " + Q(VenvDir), Home, Log);
+                    else if (await PythonOk("python", "--version")) rc = await RunCmd("python", "-m venv " + Q(VenvDir), Home, Log);
+                    if (rc != 0) throw new PythonMissingException();
                 }
-                Log("Instalando dependencias…");
-                int rc2 = await RunCmd(VenvPy, "-m pip install zstandard", Home, Log);
-                if (rc2 != 0) throw new Exception("pip install falló");
-                Log("Herramienta instalada ✓");
+                Log("Instalando dependencias\u2026");
+                int rc2 = await RunCmd(VenvPy, "-m pip install --disable-pip-version-check zstandard", Home, Log);
+                if (rc2 != 0) throw new Exception("No se pudieron instalar las dependencias. Revisa tu conexi\u00f3n a internet y reintenta.");
+                Log("Herramienta instalada \u2713");
                 statusLabel.Text = "Herramienta lista. Ya puedes convertir.";
+            }
+            catch (PythonMissingException)
+            {
+                statusLabel.Text = "Falta Python 3: sigue los pasos del registro de abajo.";
+                ShowPythonHelp();
             }
             catch (Exception ex)
             {
