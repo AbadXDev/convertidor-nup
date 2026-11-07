@@ -8,7 +8,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>ConvertidorNUP</AssemblyName>
     <RootNamespace>ConvertidorNUP</RootNamespace>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
+    <ApplicationIcon>app.ico</ApplicationIcon>
     <Authors>AbadXDev</Authors>
     <Description>Convierte una carpeta de juego de Switch 2 en un archivo .nup</Description>
     <Copyright>By AbadXDev</Copyright>

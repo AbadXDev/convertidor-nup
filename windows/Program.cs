@@ -167,6 +167,8 @@ namespace ConvertidorNUP
             Font = new Font("Segoe UI", 9.5f);
             StartPosition = FormStartPosition.CenterScreen;
             AllowDrop = true;
+            AutoScaleMode = AutoScaleMode.Dpi;
+            try { Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch { }
             DragEnter += OnDragEnter;
             DragDrop += OnDragDrop;
 
@@ -181,43 +183,43 @@ namespace ConvertidorNUP
             banner.Controls.Add(bannerText); banner.Controls.Add(installBtn);
             Controls.Add(banner);
 
-            var g1 = new GroupBox { Text = "1 · Elige la carpeta del juego", Location = new Point(20, 126), Size = new Size(664, 118), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
+            var g1 = new GroupBox { Text = "1 · Elige la carpeta del juego", Location = new Point(20, 126), Size = new Size(664, 132), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
             pickBtn = new Button { Text = "Elegir carpeta…", Location = new Point(16, 26), Size = new Size(150, 30) };
             pickBtn.Click += (s, e) => PickFolder();
-            folderLabel = new Label { Text = "La que contiene base/, updates/… o arrastra la carpeta a esta ventana.", ForeColor = Color.Gray, AutoSize = false, Location = new Point(178, 26), Size = new Size(470, 42) };
-            infoLabel = new Label { Text = "", AutoSize = false, Location = new Point(16, 64), Size = new Size(630, 46) };
+            folderLabel = new Label { Text = "La que contiene base/, updates/… o arrastra la carpeta a esta ventana.", ForeColor = Color.Gray, AutoSize = false, AutoEllipsis = true, Location = new Point(178, 26), Size = new Size(470, 42) };
+            infoLabel = new Label { Text = "", AutoSize = false, Location = new Point(16, 62), Size = new Size(630, 60) };
             g1.Controls.Add(pickBtn); g1.Controls.Add(folderLabel); g1.Controls.Add(infoLabel);
             Controls.Add(g1);
 
-            var nameLbl = new Label { Text = "Nombre del juego", AutoSize = true, Location = new Point(20, 256) };
-            nameBox = new TextBox { Location = new Point(20, 278), Size = new Size(400, 26), PlaceholderText = "Ej. Pokémon Pokopia" };
+            var nameLbl = new Label { Text = "Nombre del juego", AutoSize = true, Location = new Point(20, 270) };
+            nameBox = new TextBox { Location = new Point(20, 292), Size = new Size(400, 26), PlaceholderText = "Ej. Pokémon Pokopia" };
             nameBox.TextChanged += (s, e) => UpdateOutput();
-            var verLbl = new Label { Text = "Versión (opcional)", AutoSize = true, Location = new Point(440, 256) };
-            versionBox = new TextBox { Location = new Point(440, 278), Size = new Size(180, 26), PlaceholderText = "Ej. 2.0.1" };
+            var verLbl = new Label { Text = "Versión (opcional)", AutoSize = true, Location = new Point(440, 270) };
+            versionBox = new TextBox { Location = new Point(440, 292), Size = new Size(180, 26), PlaceholderText = "Ej. 2.0.1" };
             Controls.Add(nameLbl); Controls.Add(nameBox); Controls.Add(verLbl); Controls.Add(versionBox);
 
-            saveLabel = new Label { Text = "Se guardará como: —", AutoSize = false, Location = new Point(20, 316), Size = new Size(480, 22) };
-            changeDestBtn = new Button { Text = "Cambiar carpeta…", Location = new Point(520, 312), Size = new Size(164, 28), Enabled = false };
+            saveLabel = new Label { Text = "Se guardará como: —", AutoSize = false, Location = new Point(20, 330), Size = new Size(480, 22) };
+            changeDestBtn = new Button { Text = "Cambiar carpeta…", Location = new Point(520, 326), Size = new Size(164, 28), Enabled = false };
             changeDestBtn.Click += (s, e) => ChangeDest();
             Controls.Add(saveLabel); Controls.Add(changeDestBtn);
 
-            verifyChk = new CheckBox { Text = "Verificar el archivo al terminar (recomendado)", Checked = true, AutoSize = true, Location = new Point(20, 344) };
+            verifyChk = new CheckBox { Text = "Verificar el archivo al terminar (recomendado)", Checked = true, AutoSize = true, Location = new Point(20, 358) };
             Controls.Add(verifyChk);
 
-            convertBtn = new Button { Text = "2 · Convertir a .nup", Font = new Font("Segoe UI", 11, FontStyle.Bold), Location = new Point(20, 376), Size = new Size(240, 40), Enabled = false, BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White };
+            convertBtn = new Button { Text = "2 · Convertir a .nup", Font = new Font("Segoe UI", 11, FontStyle.Bold), Location = new Point(20, 390), Size = new Size(240, 40), Enabled = false, BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White };
             convertBtn.Click += async (s, e) => await Convert();
-            cancelBtn = new Button { Text = "Cancelar", Location = new Point(272, 376), Size = new Size(110, 40), Visible = false };
+            cancelBtn = new Button { Text = "Cancelar", Location = new Point(272, 390), Size = new Size(110, 40), Visible = false };
             cancelBtn.Click += (s, e) => { try { currentProc?.Kill(true); } catch { } };
-            openFolderBtn = new Button { Text = "Abrir carpeta", Location = new Point(272, 376), Size = new Size(130, 40), Visible = false };
+            openFolderBtn = new Button { Text = "Abrir carpeta", Location = new Point(272, 390), Size = new Size(130, 40), Visible = false };
             openFolderBtn.Click += (s, e) => { if (outputPath != null) Process.Start("explorer.exe", "/select,\"" + outputPath + "\""); };
             Controls.Add(convertBtn); Controls.Add(cancelBtn); Controls.Add(openFolderBtn);
 
-            progress = new ProgressBar { Location = new Point(20, 426), Size = new Size(664, 18), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, Style = ProgressBarStyle.Continuous };
+            progress = new ProgressBar { Location = new Point(20, 440), Size = new Size(664, 18), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, Style = ProgressBarStyle.Continuous };
             Controls.Add(progress);
-            statusLabel = new Label { Text = "Elige la carpeta de un juego para empezar.", AutoSize = false, Location = new Point(20, 450), Size = new Size(664, 24) };
+            statusLabel = new Label { Text = "Elige la carpeta de un juego para empezar.", AutoSize = false, Location = new Point(20, 464), Size = new Size(664, 24) };
             Controls.Add(statusLabel);
 
-            var g2 = new GroupBox { Text = "Registro", Location = new Point(20, 480), Size = new Size(664, 130), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
+            var g2 = new GroupBox { Text = "Registro", Location = new Point(20, 494), Size = new Size(664, 116), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
             logBox = new TextBox { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Font = new Font("Consolas", 9), Dock = DockStyle.Fill, Text = "—" };
             g2.Controls.Add(logBox);
             Controls.Add(g2);
