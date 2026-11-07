@@ -235,7 +235,7 @@ final class Model: ObservableObject {
           echo "Herramienta descargada"
         fi
         PY=""
-        for c in /opt/homebrew/bin/python3.12 python3.12 python3.13 python3.14 python3.11 python3.10 /opt/homebrew/bin/python3 python3; do
+        for c in /opt/homebrew/bin/python3.12 /opt/homebrew/bin/python3.13 /opt/homebrew/bin/python3.14 /opt/homebrew/bin/python3.11 /opt/homebrew/bin/python3.10 /Library/Frameworks/Python.framework/Versions/3.14/bin/python3 /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 /Library/Frameworks/Python.framework/Versions/3.11/bin/python3 /usr/local/bin/python3.14 /usr/local/bin/python3.13 /usr/local/bin/python3.12 /usr/local/bin/python3 /opt/homebrew/bin/python3 python3.14 python3.13 python3.12 python3.11 python3.10 python3; do
           if command -v "$c" >/dev/null 2>&1; then PY=$(command -v "$c"); break; fi
         done
         if [ -z "$PY" ]; then
@@ -249,8 +249,8 @@ final class Model: ObservableObject {
           exit 3
         fi
         echo "Usando Python: $PY"
-        "$PY" -m venv "$HOME/.venvs/nup"
-        "$HOME/.venvs/nup/bin/pip" install -q "zstandard>=0.22"
+        "$PY" -m venv "$HOME/.venvs/nup" || { echo "No se pudo crear el entorno de Python. Borra la carpeta ~/.venvs/nup y vuelve a pulsar «Instalar (1 clic)»."; exit 5; }
+        "$HOME/.venvs/nup/bin/pip" install -q "zstandard>=0.22" || { echo "No se pudieron instalar las dependencias. Revisa tu conexión a internet y vuelve a intentarlo."; exit 6; }
         echo INSTALACION_OK
         """
         run(executable: "/bin/bash", args: ["-c", script], onLine: { line in
