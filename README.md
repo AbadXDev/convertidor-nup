@@ -28,7 +28,7 @@ No compiling needed — grab the app from the [Releases](https://github.com/Abad
 ## Screenshots
 
 <p align="center">
-  <img src="assets/windows.jpg" width="49%" alt="Convertidor NUP on Windows">
+  <img src="assets/windows.jpg?v=2" width="49%" alt="Convertidor NUP on Windows">
   <img src="assets/mac.png" width="49%" alt="Convertidor NUP on macOS">
 </p>
 
