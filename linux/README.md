@@ -13,14 +13,14 @@ Instala los paquetes con el gestor de tu distribución, solo si faltan:
 sudo apt update
 sudo apt install python3 python3-tk python3-venv ca-certificates
 
-# Fedora (sistema tradicional, no Bazzite/Silverblue)
+# Fedora
 sudo dnf install python3 python3-tkinter python3-pip ca-certificates
 
 # Arch Linux
 sudo pacman -S python tk python-pip ca-certificates
 ```
 
-Comprueba el Python que utilizarás con `python3 -m tkinter`: debe abrir una ventana de prueba. Si usas un Python de Homebrew sin Tkinter, prueba `/usr/bin/python3 -m tkinter` y ejecuta el lanzador con `PYTHON=/usr/bin/python3 ./linux/run.sh`.
+Comprueba el Python que utilizarás con `python3 -m tkinter`: debe abrir una ventana de prueba.
 
 ## Ejecutar
 
@@ -54,28 +54,6 @@ python3 linux/install_desktop.py
 Copia la aplicación, su licencia y el icono a `${XDG_DATA_HOME:-~/.local/share}/convertidor-nup/` y añade `convertidor-nup.desktop` a `applications/`. Después puedes abrir **Convertidor NUP** desde el menú de aplicaciones y mover el repositorio. Repite el comando para actualizar la copia. No se configura ejecución automática al iniciar sesión.
 
 Para quitar el acceso directo, elimina únicamente `applications/convertidor-nup.desktop` dentro de ese directorio de datos. Para desinstalar la app y su herramienta, elimina también su subcarpeta `convertidor-nup/`; los juegos y resultados guardados fuera de ella permanecen intactos.
-
-## Bazzite / Fedora Atomic
-
-Usa un contenedor Distrobox para disponer de Python con Tkinter sin modificar la imagen del sistema, siguiendo la [documentación de Bazzite](https://docs.bazzite.gg/Installing_and_Managing_Software/Distrobox/):
-
-```sh
-distrobox create --name nup-linux --image ubuntu:24.04
-distrobox enter nup-linux
-sudo apt update
-sudo apt install python3 python3-tk python3-venv ca-certificates
-# Dentro del contenedor, entra al repositorio (el directorio personal se comparte).
-cd /ruta/a/convertidor-nup
-/usr/bin/python3 linux/convertidor_nup.py
-```
-
-En usos posteriores ejecuta desde el host:
-
-```sh
-distrobox enter nup-linux -- /usr/bin/python3 /ruta/a/convertidor-nup/linux/convertidor_nup.py
-```
-
-Ejecuta la app y su herramienta siempre dentro del mismo contenedor. Para integrar aplicaciones de un contenedor en el menú del host, consulta [distrobox-export](https://distrobox.it/usage/distrobox-export/); un acceso directo generado dentro del contenedor necesita ese envoltorio para funcionar desde el host.
 
 ## Herramienta y compatibilidad
 

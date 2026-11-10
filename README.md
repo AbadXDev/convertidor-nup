@@ -45,7 +45,7 @@ The output is named `Name [TitleID].nup`, saved next to the source folder (you c
 
 ## Requirements
 
-- Windows 10/11 (64-bit), macOS 13+ (Apple Silicon), or a Linux desktop with Python 3.10+, Tkinter and venv support. Linux setup, including Bazzite/Distrobox, is described in [`linux/README.md`](linux/README.md).
+- Windows 10/11 (64-bit), macOS 13+ (Apple Silicon), or a Linux desktop with Python 3.10+, Tkinter and venv support. Linux installation instructions are described in [`linux/README.md`](linux/README.md).
 - On first run, if the packing tool is not installed yet, the app installs it with **one click**: it downloads the open-source [`nup`](https://github.com/a55uka/nup) tool by a55uka and sets it up on its own. It needs internet and **Python 3.10 or later** — and if Python is missing, the app detects it and walks you through installing it, step by step.
 
 ## Build from source
@@ -70,7 +70,7 @@ Una app súper fácil, para **macOS, Windows y Linux**, que convierte la **carpe
 2. Rellena sola el **nombre** y la **versión** desde el nombre de la carpeta; puedes corregirlos.
 3. **Convierte**: barra de progreso en vivo y, al terminar, verificación completa (SHA-256) del archivo generado.
 
-Requisitos: Windows 10/11 (64 bits), macOS 13 o superior (Apple Silicon), o Linux con Python 3.10+, Tkinter y soporte para entornos virtuales. Si falta la herramienta de empaquetado, la app la instala con 1 clic en el primer uso (requiere internet). Para instalar los requisitos de Linux, incluido Bazzite, consulta [la guía de Linux](linux/README.md).
+Requisitos: Windows 10/11 (64 bits), macOS 13 o superior (Apple Silicon), o Linux con Python 3.10+, Tkinter y soporte para entornos virtuales. Si falta la herramienta de empaquetado, la app la instala con 1 clic en el primer uso (requiere internet). Para instalar los requisitos de Linux, consulta [la guía de Linux](linux/README.md).
 
 Descarga: página de [Releases](https://github.com/AbadXDev/convertidor-nup/releases) (zip de Windows o de Mac, según tu sistema).
 
