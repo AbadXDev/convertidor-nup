@@ -1,0 +1,43 @@
+name: Linux
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            python: '3.10'
+          - os: ubuntu-24.04
+            python: '3.12'
+          - os: ubuntu-24.04
+            python: '3.14'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install graphical test dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y python3-tk xvfb xauth desktop-file-utils
+      - name: Check launcher and whitespace
+        run: |
+          sh -n linux/run.sh
+          ./linux/run.sh --help
+          git diff --check
+      - name: Backend, desktop, GUI and real nup tests
+        env:
+          NUP_INTEGRATION: '1'
+        run: xvfb-run -a python3 -m unittest discover -s linux/tests -v
