@@ -1,4 +1,8 @@
 <p align="center">
+  🌐 <strong>English</strong> · <a href="README.es.md">Español</a> · <a href="README.zh.md">中文</a>
+</p>
+
+<p align="center">
   <img src="assets/icon.png" width="128" alt="Convertidor NUP icon">
 </p>
 
@@ -57,19 +61,3 @@ The output is named `Name [TitleID].nup`, saved next to the source folder (you c
 - App by **AbadXDev** — MIT License (see `LICENSE`).
 - Packing is done by the [`nup`](https://github.com/a55uka/nup) command-line tool (MIT), which is **not** bundled with this app; it's downloaded on first use.
 - Not affiliated with Nintendo. Use it only with dumps of games you own.
-
----
-
-## En español
-
-Una app súper fácil, para **macOS y Windows**, que convierte la **carpeta** de un dump de juego de Switch 2 en un solo archivo **`.nup`**, con muy pocos clics y sin tocar la terminal.
-
-1. **Elige la carpeta** (botón o arrastrándola): la app comprueba que sea un dump válido, lee el **título ID** del propio juego, te dice qué paquetes trae (base, updates, DLC) y cuánto ocupa.
-2. Rellena sola el **nombre** y la **versión** desde el nombre de la carpeta; puedes corregirlos.
-3. **Convierte**: barra de progreso en vivo y, al terminar, verificación completa (SHA-256) del archivo generado.
-
-Requisitos: Windows 10/11 (64 bits) o macOS 13 o superior (Apple Silicon). Si la herramienta de empaquetado no está instalada, la app la instala con 1 clic en el primer uso; solo necesita internet y Python 3.10 o superior — y si falta Python, la propia app te guía paso a paso para instalarlo.
-
-Descarga: página de [Releases](https://github.com/AbadXDev/convertidor-nup/releases) (zip de Windows o de Mac, según tu sistema).
-
-Hecho por **AbadXDev** · Licencia MIT · Sin afiliación con Nintendo; úsalo solo con dumps de tus propios juegos.
